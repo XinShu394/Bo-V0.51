@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡牌对战游戏</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        #gameCanvas {
+            display: block;
+            border-radius: 7px;
+        }
+
+        #settingsPanel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+        }
+
+        #settingsButton {
+            background: url('ui素材图/设置图标.png') no-repeat center center;
+            background-size: contain;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            text-indent: -9999px; /* 隐藏文字 */
+            overflow: hidden;
+            display: block;
+        }
+
+        #settingsButton:hover {
+            opacity: 0.8;
+        }
+
+        #settingsMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 2000;
+            display: none !important;
+        }
+
+        #settingsMessage.show {
+            display: block !important;
+        }
+
+        #loadingScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            z-index: 1000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #fpsCounter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1200" height="800"></canvas>
+        
+        <!-- 加载界面 -->
+        <div id="loadingScreen">
+            <div>游戏加载中...</div>
+        </div>
+        
+        <!-- FPS计数器已移除 -->
+        
+        <!-- 设置面板 -->
+        <div id="settingsPanel">
+            <button id="settingsButton">游戏设置</button>
+        </div>
+        
+        <!-- 设置消息 -->
+        <div id="settingsMessage">设置</div>
+    </div>
+
+    <!-- 游戏脚本 -->
+    <script src="js/utils.js"></script>
+    <script src="js/animation.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/characters.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/scenes.js"></script>
+    <script src="js/tutorial.js"></script>
+    <script src="js/battle.js"></script>
+    <script src="js/game.js"></script>
+
+    <script>
+        // FPS计数器已移除
+
+        // 游戏初始化
+        let game;
+
+        window.addEventListener('load', async () => {
+            try {
+                Debug.log('页面加载完成，开始初始化游戏...');
+                
+                game = new Game();
+                await game.init();
+                
+                Debug.log('游戏启动成功');
+            } catch (error) {
+                console.error('游戏启动失败:', error);
+                alert('游戏启动失败: ' + error.message);
+            }
+        });
+
+        // 错误处理
+        window.addEventListener('error', (e) => {
+            console.error('全局错误:', e.error);
+        });
+
+        // 设置面板功能
+        document.addEventListener('DOMContentLoaded', () => {
+            const settingsButton = document.getElementById('settingsButton');
+            const settingsMessage = document.getElementById('settingsMessage');
+
+            // 确保设置消息默认隐藏
+            settingsMessage.classList.remove('show');
+
+            // 设置按钮点击效果 - 在中央显示"设置"
+            settingsButton.addEventListener('click', () => {
+                settingsMessage.classList.add('show');
+                
+                // 2秒后自动隐藏
+                setTimeout(() => {
+                    settingsMessage.classList.remove('show');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html> 
